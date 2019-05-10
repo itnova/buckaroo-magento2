@@ -56,6 +56,7 @@
             <label>Secret key</label>
             <comment><![CDATA[Enter your Buckaroo Secret Key.]]></comment>
             <tooltip>The Secret Key can be retrieved in Payment Plaza under Configuration > Security > Secret Key. For support contact Buckaroo.</tooltip>
+            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
             <config_path>tig_buckaroo/account/secret_key</config_path>
         </field>
 
@@ -63,6 +64,7 @@
             <label>(Merchant) key</label>
             <comment><![CDATA[Enter your Buckaroo merchant/website key.]]></comment>
             <tooltip>The (Merchant) Key can be retrieved in Payment Plaza under My Buckaroo > Websites. For support contact Buckaroo.</tooltip>
+            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
             <config_path>tig_buckaroo/account/merchant_key</config_path>
         </field>
 

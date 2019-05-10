@@ -495,6 +495,11 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
             $this->installReservationNrColumn($setup);
             $this->installPushDataColumn($setup);
         }
+
+        if (version_compare($context->getVersion(), '1.10.0', '<')) {
+            $this->updateSecretKeyConfiguration($setup);
+            $this->updateMerchantKeyConfiguration($setup);
+        }
     }
 
     /**
@@ -1098,6 +1103,55 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
             'order',
             'buckaroo_push_data',
             ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT]
+        );
+
+        return $this;
+    }
+
+
+    /**
+     * Empty Secret_key so it will be set with correct value
+     *
+     * @param ModuleDataSetupInterface $setup
+     *
+     * @return $this
+     */
+    protected function updateSecretKeyConfiguration(ModuleDataSetupInterface $setup)
+    {
+        $path = 'tig_buckaroo/account/secret_key';
+        $data = [
+            'path' => $path,
+            'value' => '',
+        ];
+
+        $setup->getConnection()->update(
+            $setup->getTable('core_config_data'),
+            $data,
+            $setup->getConnection()->quoteInto('path = ?', $path)
+        );
+
+        return $this;
+    }
+
+    /**
+     * Empty MerchantKey so it will be set with correct value
+     *
+     * @param ModuleDataSetupInterface $setup
+     *
+     * @return $this
+     */
+    protected function updateMerchantKeyConfiguration(ModuleDataSetupInterface $setup)
+    {
+        $path = 'tig_buckaroo/account/merchant_key';
+        $data = [
+            'path' => $path,
+            'value' => '',
+        ];
+
+        $setup->getConnection()->update(
+            $setup->getTable('core_config_data'),
+            $data,
+            $setup->getConnection()->quoteInto('path = ?', $path)
         );
 
         return $this;

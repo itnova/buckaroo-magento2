@@ -44,6 +44,7 @@ use TIG\Buckaroo\Helper\Data;
 use TIG\Buckaroo\Logging\Log;
 use TIG\Buckaroo\Model\ConfigProvider\Account;
 use \TIG\Buckaroo\Model\ValidatorInterface;
+use \Magento\Framework\Encryption\Encryptor;
 
 /**
  * Class Push
@@ -61,6 +62,9 @@ class Push implements ValidatorInterface
     /** @var Log $logging */
     public $logging;
 
+    /** @var Encryptor $encryptor */
+    private $encryptor;
+
     public $bpeResponseMessages = [
         190 => 'Success',
         490 => 'Payment failure',
@@ -76,18 +80,21 @@ class Push implements ValidatorInterface
     ];
 
     /**
-     * @param Data    $helper
-     * @param Account $configProviderAccount
-     * @param Log     $logging
+     * @param Data          $helper
+     * @param Account       $configProviderAccount
+     * @param Log           $logging
+     * @param Encryptor     $encryptor
      */
     public function __construct(
         Data $helper,
         Account $configProviderAccount,
-        Log $logging
+        Log $logging,
+        Encryptor $encryptor
     ) {
         $this->helper                   = $helper;
         $this->configProviderAccount    = $configProviderAccount;
         $this->logging                  = $logging;
+        $this->encryptor                = $encryptor;
     }
 
     /**
@@ -171,7 +178,7 @@ class Push implements ValidatorInterface
             $signatureString .= $brq_key. '=' . $value;
         }
 
-        $digitalSignature = $this->configProviderAccount->getSecretKey();
+        $digitalSignature = $this->encryptor->decrypt($this->configProviderAccount->getSecretKey());
 
         $signatureString .= $digitalSignature;
 
