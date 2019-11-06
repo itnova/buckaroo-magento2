@@ -1414,7 +1414,7 @@ class Afterpay20 extends AbstractMethod
         $transactionType = $transactionResponse->TransactionType;
         $methodMessage = '';
 
-        if ($transactionType != 'C011' && $transactionType != 'C016') {
+        if (!in_array($transactionType, ['C011', 'C016', 'C039'])) {
             return $methodMessage;
         }
 
