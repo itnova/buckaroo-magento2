@@ -43,6 +43,7 @@ namespace TIG\Buckaroo\Gateway\Http\TransactionBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\Encryption\Encryptor;
 use Magento\Store\Model\ScopeInterface;
 use TIG\Buckaroo\Gateway\Http\Transaction;
 use TIG\Buckaroo\Model\ConfigProvider\Account;
@@ -135,6 +136,9 @@ abstract class AbstractTransactionBuilder implements \TIG\Buckaroo\Gateway\Http\
      * @var string
      */
     public $invoiceId;
+
+    /** @var Encryptor $encryptor */
+    private $encryptor;
 
     /**
      * {@inheritdoc}
@@ -266,6 +270,7 @@ abstract class AbstractTransactionBuilder implements \TIG\Buckaroo\Gateway\Http\
      * @param Transaction           $transaction
      * @param UrlInterface          $urlBuilder
      * @param FormKey               $formKey
+     * @param Encryptor             $encryptor
      * @param null|int|float|double $amount
      * @param null|string           $currency
      */
@@ -276,6 +281,7 @@ abstract class AbstractTransactionBuilder implements \TIG\Buckaroo\Gateway\Http\
         Transaction $transaction,
         UrlInterface $urlBuilder,
         FormKey $formKey,
+        Encryptor $encryptor,
         $amount = null,
         $currency = null
     ) {
@@ -285,6 +291,7 @@ abstract class AbstractTransactionBuilder implements \TIG\Buckaroo\Gateway\Http\
         $this->transaction           = $transaction;
         $this->urlBuilder            = $urlBuilder;
         $this->formKey               = $formKey;
+        $this->encryptor             = $encryptor;
 
         if ($amount !== null) {
             $this->amount = $amount;
@@ -444,12 +451,14 @@ abstract class AbstractTransactionBuilder implements \TIG\Buckaroo\Gateway\Http\
         $localeCountry = $this->scopeConfig->getValue('general/locale/code', ScopeInterface::SCOPE_STORE, $store);
         $localeCountry = str_replace('_', '-', $localeCountry);
 
+        $merchantKey = $this->encryptor->decrypt($this->configProviderAccount->getMerchantKey($store));
+
         $headers[] = new \SoapHeader(
             'https://checkout.buckaroo.nl/PaymentEngine/',
             'MessageControlBlock',
             [
                 'Id'                => '_control',
-                'WebsiteKey'        => $this->configProviderAccount->getMerchantKey($store),
+                'WebsiteKey'        => $merchantKey,
                 'Culture'           => $localeCountry,
                 'TimeStamp'         => time(),
                 'Channel'           => $this->channel,
