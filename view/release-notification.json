@@ -1,0 +1,34 @@
+{
+  "pages": [{
+    "id": 1,
+    "name": 1,
+    "mainContent": {
+      "title": "The Buckaroo Extension is successful installed",
+      "imageUrl": "",
+      "content": [{
+        "text": "This is the official Buckaroo Magento 2 extension, version 1.14.0."
+      }],
+      "lists": []
+    },
+    "subHeading": [{
+      "title": "",
+      "imageUrl": "TIG_Buckaroo::images/buckaroo_small.png",
+      "content": ""
+    }, {
+      "title": "Important information",
+      "imageUrl": "",
+      "content": "With this version the security of the configuration fields is improved. This means you have to fill in your Merchant and Secret key again in the configuration to activate Buckaroo. "
+    }, {
+      "title": "Configuration",
+      "imageUrl": "",
+      "content": "You can find the fields in the Magento Configuration. In the left menu click on Stores > Configuration > Sales > Buckaroo."
+    }, {
+      "title": "Buckaroo Plaza",
+      "imageUrl": "",
+      "content": "In the Buckaroo Plaza https://plaza.buckaroo.nl the Merchant Key can be found under: My Buckaroo > Websites. The Secret Key can be found under: Configuration > Security > Secret Key."
+    }],
+    "footer": {
+      "content": "&nbsp;"
+    }
+  }]
+}
