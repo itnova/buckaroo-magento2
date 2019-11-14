@@ -56,11 +56,13 @@ class NotificationDataProvider extends \Magento\Ui\DataProvider\AbstractDataProv
         array $meta = [],
         array $data = []
     ) {
-        parent::__construct($name,
+        parent::__construct(
+            $name,
             $primaryFieldName,
             $requestFieldName,
             $meta,
-            $data);
+            $data
+        );
 
         $this->modifier = $modifier;
     }
@@ -86,6 +88,5 @@ class NotificationDataProvider extends \Magento\Ui\DataProvider\AbstractDataProv
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
-        // not working.
     }
 }

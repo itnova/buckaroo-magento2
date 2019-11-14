@@ -37,17 +37,15 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Module\Dir\Reader;
-use TIG\Buckaroo\Ui\Renderer\NotificationRenderer;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use TIG\Buckaroo\Ui\Renderer\NotificationRenderer;
 
 /**
  * @see \Magento\ReleaseNotification\Ui\DataProvider\Modifier\Notifications
  */
 class Notifications implements ModifierInterface
 {
-    const CACHE_PREFIX = 'tig-release-notification';
-
     /** @var CacheInterface $cacheStorage */
     private $cacheStorage;
 
@@ -184,21 +182,22 @@ class Notifications implements ModifierInterface
      * Returns the json data
      *
      * @return array
+     * @throws FileSystemException
      */
-    private function getNotificationContent(): array
+    private function getNotificationContent()
     {
-        $content = $this->cacheStorage->load(self::CACHE_PREFIX);
-        $content = false;
-        if ($content === false) {
+        $cacheKey = 'tig-release-notification';
+        $modalContent = $this->cacheStorage->load($cacheKey);
+        if ($modalContent === false) {
             $readDirectory  = $this->readFactory->create(
                 $this->moduleReader->getModuleDir(\Magento\Framework\Module\Dir::MODULE_VIEW_DIR, 'TIG_Buckaroo'),
                 \Magento\Framework\Filesystem\DriverPool::FILE
             );
-            $content = $readDirectory->readFile('release-notification.json');
+            $modalContent = $readDirectory->readFile('release-notification.json');
 
-            $this->cacheStorage->save($content, self::CACHE_PREFIX);
+            $this->cacheStorage->save($modalContent, $cacheKey);
         }
 
-        return $this->serializer->unserialize($content);
+        return $this->serializer->unserialize($modalContent);
     }
 }
