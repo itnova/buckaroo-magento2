@@ -369,8 +369,9 @@ define(
                     };
                 },
 
-                updateTermsUrl: function (country, tosCountry = false) {
+                updateTermsUrl: function (country, tosCountry) {
                     this.country = country;
+                    tosCountry = (tosCountry === undefined) ? false : tosCountry;
                     var newUrl = this.getTermsUrl(tosCountry);
 
                     this.showFrenchTosValue(false);
@@ -382,8 +383,9 @@ define(
                     this.termsUrl(newUrl);
                 },
 
-                getTermsUrl: function (tosCountry = false) {
+                getTermsUrl: function (tosCountry) {
                     var tosUrl = 'https://documents.myafterpay.com/consumer-terms-conditions/';
+                    tosCountry = (tosCountry === undefined) ? false : tosCountry;
 
                     if (tosCountry !== false) {
                         tosUrl += tosCountry + '/';
