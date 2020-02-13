@@ -29,7 +29,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "TIG\\Buckaroo\\": ""
+            "Kega\\Buckaroo\\": ""
         }
     },
     "require-dev": {
